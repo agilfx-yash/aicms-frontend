@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button } from "../../components/Button";
 import { Label } from "../../components/Label";
 import { Input } from "../../components/Input";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
 
 // Simple Loader Component
 const Loader = () => (
@@ -21,6 +22,8 @@ export default function Dashboard() {
   const [videoIsFetching, setVideoIsFetching] = useState(false);
   const [articleIsFetching, setArticleIsFetching] = useState(false);
 
+  const navigate = useNavigate(); // Initialize navigate for redirection
+
   const handleVideoUrlChange = (e) => {
     setVideoUrl(e.target.value);
   };
@@ -34,11 +37,18 @@ export default function Dashboard() {
     try {
       const encodedUrl = encodeURIComponent(videoUrl);
       const response = await fetch(
-        `https://aicms-backend.onrender.com/get_transcript?url=${encodedUrl}`
+        `https://aicms-backend.onrender.com/get-captions`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ video_url: videoUrl }),
+        }
       );
       const data = await response.json();
       if (response.ok) {
-        setVideoText(data.transcript);
+        setVideoText(data.description);
         setVideoSummary(""); // Clear summary if a new transcript is fetched
       } else {
         setVideoText(`Error: ${data.error}`);
@@ -51,9 +61,10 @@ export default function Dashboard() {
   };
 
   const summarizeVideoText = async () => {
+    setVideoSummary("Loading..."); // Show loading state for summary
     try {
       const response = await fetch(
-        "https://fqg3ca.buildship.run/summarize_transcript",
+        "https://aicms-backend.onrender.com/summarize_transcript",
         {
           method: "POST",
           headers: {
@@ -73,7 +84,7 @@ export default function Dashboard() {
       }
 
       if (response.ok) {
-        setVideoSummary(data.output);
+        setVideoSummary(data.summary);
       } else {
         setVideoSummary(`Error: ${data.error}`);
       }
@@ -104,9 +115,10 @@ export default function Dashboard() {
   };
 
   const summarizeArticleText = async () => {
+    setArticleSummary("Loading..."); // Show loading state for summary
     try {
       const response = await fetch(
-        "https://fqg3ca.buildship.run/summarize_transcript",
+        "https://aicms-backend.onrender.com/summarize_transcript",
         {
           method: "POST",
           headers: {
@@ -126,7 +138,7 @@ export default function Dashboard() {
       }
 
       if (response.ok) {
-        setArticleSummary(data.output);
+        setArticleSummary(data.summary);
       } else {
         setArticleSummary(`Error: ${data.error}`);
       }
@@ -153,6 +165,9 @@ export default function Dashboard() {
           <div className="flex items-center space-x-4">
             <Button variant="ghost">Profile</Button>
             <Button variant="ghost">Settings</Button>
+            <Button onClick={() => navigate("/auth")} variant="ghost">
+              Login / Signup
+            </Button>
           </div>
         </nav>
       </header>
@@ -184,12 +199,17 @@ export default function Dashboard() {
                 <p>{videoText}</p>
               </div>
             )}
-            {!videoIsFetching && videoSummary && (
-              <div className="bg-muted/20 rounded-lg p-4">
-                <h3 className="text-lg font-bold">Summary</h3>
-                <p>{videoSummary}</p>
-              </div>
-            )}
+            {!videoIsFetching &&
+              (videoSummary === "Loading..." ? (
+                <Loader />
+              ) : (
+                videoSummary && (
+                  <div className="bg-muted/20 rounded-lg p-4">
+                    <h3 className="text-lg font-bold">Summary</h3>
+                    <p>{videoSummary}</p>
+                  </div>
+                )
+              ))}
           </div>
         </div>
         <div className="bg-background rounded-lg shadow p-6">
@@ -219,12 +239,17 @@ export default function Dashboard() {
                 <p>{articleText}</p>
               </div>
             )}
-            {!articleIsFetching && articleSummary && (
-              <div className="bg-muted/20 rounded-lg p-4">
-                <h3 className="text-lg font-bold">Summary</h3>
-                <p>{articleSummary}</p>
-              </div>
-            )}
+            {!articleIsFetching &&
+              (articleSummary === "Loading..." ? (
+                <Loader />
+              ) : (
+                articleSummary && (
+                  <div className="bg-muted/20 rounded-lg p-4">
+                    <h3 className="text-lg font-bold">Summary</h3>
+                    <p>{articleSummary}</p>
+                  </div>
+                )
+              ))}
           </div>
         </div>
       </main>

@@ -4,7 +4,7 @@ export const Button = ({ onClick, children, variant = "default" }) => {
   const getClassNames = () => {
     switch (variant) {
       case "ghost":
-        return "bg-transparent hover:bg-gray-200 text-gray-700";
+        return "bg-transparent hover:bg-blue-600 text-white-700";
       case "default":
       default:
         return "bg-blue-500 hover:bg-blue-600 text-white";
