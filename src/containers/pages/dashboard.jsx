@@ -3,6 +3,13 @@ import { Button } from "../../components/Button";
 import { Label } from "../../components/Label";
 import { Input } from "../../components/Input";
 
+// Simple Loader Component
+const Loader = () => (
+  <div className="flex items-center justify-center p-4">
+    <div className="w-8 h-8 border-4 border-t-4 border-gray-500 border-t-transparent rounded-full animate-spin"></div>
+  </div>
+);
+
 export default function Dashboard() {
   const [videoUrl, setVideoUrl] = useState("");
   const [videoText, setVideoText] = useState("");
@@ -30,7 +37,6 @@ export default function Dashboard() {
         `https://aicms-backend.onrender.com/get_transcript?url=${encodedUrl}`
       );
       const data = await response.json();
-      console.log(data);
       if (response.ok) {
         setVideoText(data.transcript);
         setVideoSummary(""); // Clear summary if a new transcript is fetched
@@ -45,7 +51,6 @@ export default function Dashboard() {
   };
 
   const summarizeVideoText = async () => {
-    console.log("call", videoText);
     try {
       const response = await fetch(
         "https://fqg3ca.buildship.run/summarize_transcript",
@@ -57,18 +62,12 @@ export default function Dashboard() {
           body: JSON.stringify({ transcript: videoText }),
         }
       );
-      console.log(response);
-
-      // Check if response is JSON
       const contentType = response.headers.get("content-type");
       let data;
       if (contentType && contentType.includes("application/json")) {
         data = await response.json();
-        console.log(data);
       } else {
-        // Handle non-JSON response
         const text = await response.text();
-        console.error("Unexpected response format:", text);
         setVideoSummary(`Error: Unexpected response format.`);
         return;
       }
@@ -91,7 +90,6 @@ export default function Dashboard() {
         `https://aicms-backend.onrender.com/get_article_content?url=${encodedUrl}`
       );
       const data = await response.json();
-      console.log(data);
       if (response.ok) {
         setArticleText(data.content);
         setArticleSummary(""); // Clear summary if a new article is fetched
@@ -106,7 +104,6 @@ export default function Dashboard() {
   };
 
   const summarizeArticleText = async () => {
-    console.log("call", articleText);
     try {
       const response = await fetch(
         "https://fqg3ca.buildship.run/summarize_transcript",
@@ -118,18 +115,12 @@ export default function Dashboard() {
           body: JSON.stringify({ transcript: articleText }), // Assuming similar endpoint for articles
         }
       );
-      console.log(response);
-
-      // Check if response is JSON
       const contentType = response.headers.get("content-type");
       let data;
       if (contentType && contentType.includes("application/json")) {
         data = await response.json();
-        console.log(data);
       } else {
-        // Handle non-JSON response
         const text = await response.text();
-        console.error("Unexpected response format:", text);
         setArticleSummary(`Error: Unexpected response format.`);
         return;
       }
@@ -187,10 +178,13 @@ export default function Dashboard() {
                 <Button onClick={summarizeVideoText}>Get Summary</Button>
               )}
             </div>
-            <div className="bg-muted/20 rounded-lg p-4">
-              <p>{videoText}</p>
-            </div>
-            {videoSummary && (
+            {videoIsFetching && <Loader />}
+            {!videoIsFetching && videoText && !videoSummary && (
+              <div className="bg-muted/20 rounded-lg p-4">
+                <p>{videoText}</p>
+              </div>
+            )}
+            {!videoIsFetching && videoSummary && (
               <div className="bg-muted/20 rounded-lg p-4">
                 <h3 className="text-lg font-bold">Summary</h3>
                 <p>{videoSummary}</p>
@@ -219,10 +213,13 @@ export default function Dashboard() {
                 <Button onClick={summarizeArticleText}>Get Summary</Button>
               )}
             </div>
-            <div className="bg-muted/20 rounded-lg p-4">
-              <p>{articleText}</p>
-            </div>
-            {articleSummary && (
+            {articleIsFetching && <Loader />}
+            {!articleIsFetching && articleText && !articleSummary && (
+              <div className="bg-muted/20 rounded-lg p-4">
+                <p>{articleText}</p>
+              </div>
+            )}
+            {!articleIsFetching && articleSummary && (
               <div className="bg-muted/20 rounded-lg p-4">
                 <h3 className="text-lg font-bold">Summary</h3>
                 <p>{articleSummary}</p>
