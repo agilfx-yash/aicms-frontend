@@ -27,7 +27,7 @@ export default function Dashboard() {
     try {
       const encodedUrl = encodeURIComponent(videoUrl);
       const response = await fetch(
-        `http://127.0.0.1:5000/get_transcript?url=${encodedUrl}`
+        `https://aicms-backend.onrender.com/get_transcript?url=${encodedUrl}`
       );
       const data = await response.json();
       console.log(data);
@@ -88,7 +88,7 @@ export default function Dashboard() {
     try {
       const encodedUrl = encodeURIComponent(articleUrl);
       const response = await fetch(
-        `http://127.0.0.1:5000/get_article_content?url=${encodedUrl}`
+        `https://aicms-backend.onrender.com/get_article_content?url=${encodedUrl}`
       );
       const data = await response.json();
       console.log(data);
