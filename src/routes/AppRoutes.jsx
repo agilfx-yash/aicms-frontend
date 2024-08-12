@@ -2,15 +2,21 @@ import React from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Dashboard from "../containers/pages/dashboard";
 import { AuthComponent } from "../containers/pages/AuthComponent";
-import AICMSAnimation from "../containers/pages/AICMSAnimation";
+import ProtectedRoute from "./ProtectedRoute";
 
 function AppRoutes() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Dashboard />} />{" "}
-        <Route path="/auth" element={<AuthComponent />} />{" "}
-        <Route path="/animation" element={<AICMSAnimation />} />
+        <Route path="/" element={<AuthComponent />} />{" "}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />{" "}
       </Routes>
     </div>
   );

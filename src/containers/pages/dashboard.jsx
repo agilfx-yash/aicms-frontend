@@ -3,6 +3,7 @@ import { Button } from "../../components/Button";
 import { Label } from "../../components/Label";
 import { Input } from "../../components/Input";
 import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import { useAuth } from "../../context/AuthContext";
 
 // Simple Loader Component
 const Loader = () => (
@@ -18,6 +19,7 @@ export default function Dashboard() {
   const [articleUrl, setArticleUrl] = useState("");
   const [articleText, setArticleText] = useState("");
   const [articleSummary, setArticleSummary] = useState("");
+  const { logout } = useAuth(); // Destructure logout from useAuth
 
   const [videoIsFetching, setVideoIsFetching] = useState(false);
   const [articleIsFetching, setArticleIsFetching] = useState(false);
@@ -146,7 +148,10 @@ export default function Dashboard() {
       setArticleSummary(`Error: ${error.message}`);
     }
   };
-
+  const handleLogout = () => {
+    logout(); // Call logout function to update state
+    navigate("/"); // Redirect to login page
+  };
   return (
     <div className="flex flex-col h-screen">
       <header className="bg-primary text-primary-foreground py-4 px-6">
@@ -155,19 +160,19 @@ export default function Dashboard() {
             <a href="#" className="text-lg font-bold">
               Dashboard
             </a>
-            <a href="#" className="text-lg font-medium">
+            {/* <a href="#" className="text-lg font-medium">
               Video
             </a>
             <a href="#" className="text-lg font-medium">
               Article
-            </a>
+            </a> */}
           </div>
           <div className="flex items-center space-x-4">
-            <Button variant="ghost">Profile</Button>
-            <Button variant="ghost">Settings</Button>
-            <Button onClick={() => navigate("/auth")} variant="ghost">
-              Login / Signup
-            </Button>
+            {/* <Button variant="ghost">Profile</Button>
+            <Button variant="ghost">Settings</Button> */}
+            <Button onClick={handleLogout} variant="ghost">
+              Logout
+            </Button>{" "}
           </div>
         </nav>
       </header>

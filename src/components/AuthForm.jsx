@@ -15,7 +15,7 @@ export function AuthForm({
       <h1 className="mb-4 text-4xl font-bold text-primary">
         {isSignUpVisible ? "Sign Up" : "Login"}
       </h1>
-      <p className="mb-6 text-lg text-muted-foreground">
+      {/* <p className="mb-6 text-lg text-muted-foreground">
         {isSignUpVisible
           ? "Sign up using social networks"
           : "Login using social networks"}
@@ -26,7 +26,7 @@ export function AuthForm({
         <div className="flex-grow border-t border-muted" />
         <span className="px-4 text-sm text-muted-foreground">OR</span>
         <div className="flex-grow border-t border-muted" />
-      </div>
+      </div> */}
 
       <form
         className="w-full max-w-sm space-y-4 flex-1"

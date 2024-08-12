@@ -4,6 +4,7 @@ import { AuthForm } from "../../components/AuthForm";
 import { ToggleButton } from "../../components/ToggleButton";
 import { Button } from "../../components/Button";
 import axios from "axios";
+import { useAuth } from "../../context/AuthContext";
 export function AuthComponent() {
   const [isSignUpVisible, setIsSignUpVisible] = useState(true);
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ export function AuthComponent() {
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth(); // Use the login function from AuthContext
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,10 +31,11 @@ export function AuthComponent() {
       const { data } = await axios.post(url, formData);
 
       // Handle successful response (e.g., store token, redirect)
-      navigate("/animation"); // Redirect to the animation page
-      console.log("Success:", data);
+      login();
+      navigate("/dashboard");
+      // console.log("Success:", data);
     } catch (error) {
-      setError("An error occurred. Please try again.");
+      setError("Please use correct Email Id or Password.");
       console.error("Error:", error);
     }
   };
@@ -41,9 +44,9 @@ export function AuthComponent() {
     <div className="flex flex-col md:flex-row min-h-screen bg-background">
       <div className="flex flex-col w-full md:w-1/2 p-8">
         <div className="flex items-center mb-8">
-          <Button onClick={() => navigate("/")} variant="default">
+          {/* <Button onClick={() => navigate("/")} variant="default">
             Back
-          </Button>
+          </Button> */}
           <span className="ml-4 text-xl font-semibold text-primary">AICMS</span>
         </div>
         <AuthForm
@@ -53,10 +56,10 @@ export function AuthComponent() {
           handleSubmit={handleSubmit}
           error={error}
         />
-        <ToggleButton
+        {/* <ToggleButton
           isSignUpVisible={isSignUpVisible}
           setIsSignUpVisible={setIsSignUpVisible}
-        />
+        /> */}
       </div>
       <div className="flex flex-col items-center justify-center w-full md:w-1/2 p-8 bg-gradient-to-r from-primary to-secondary">
         <div className="flex flex-col items-center text-white">
