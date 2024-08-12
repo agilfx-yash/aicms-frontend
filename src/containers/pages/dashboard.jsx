@@ -37,7 +37,7 @@ export default function Dashboard() {
     try {
       const encodedUrl = encodeURIComponent(videoUrl);
       const response = await fetch(
-        `https://aicms-backend.onrender.com/get-captions`,
+        `https://aicms-backend-bcf49b15774f.herokuapp.com/get-captions`,
         {
           method: "POST",
           headers: {
@@ -64,7 +64,7 @@ export default function Dashboard() {
     setVideoSummary("Loading..."); // Show loading state for summary
     try {
       const response = await fetch(
-        "https://aicms-backend.onrender.com/summarize_transcript",
+        "https://aicms-backend-bcf49b15774f.herokuapp.com/summarize_transcript",
         {
           method: "POST",
           headers: {
@@ -98,7 +98,7 @@ export default function Dashboard() {
     try {
       const encodedUrl = encodeURIComponent(articleUrl);
       const response = await fetch(
-        `https://aicms-backend.onrender.com/get_article_content?url=${encodedUrl}`
+        `https://aicms-backend-bcf49b15774f.herokuapp.com/get_article_content?url=${encodedUrl}`
       );
       const data = await response.json();
       if (response.ok) {
