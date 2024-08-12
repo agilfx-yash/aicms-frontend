@@ -42,14 +42,22 @@ export function FormField({
 
   return (
     <div className="relative">
-      <Input
-        type={type}
+      <input
+        type={"Email"}
         name={name}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
         className="w-full pl-4 pr-10 py-2 rounded-lg bg-muted"
       />
+      {/* <Input
+        type={type}
+        name={name}
+        placeholder="Email"
+        value={value}
+        onChange={onChange}
+        className="w-full pl-4 pr-10 py-2 rounded-lg bg-muted"
+      /> */}
     </div>
   );
 }

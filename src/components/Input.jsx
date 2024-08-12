@@ -2,7 +2,7 @@ import React from "react";
 
 export const Input = ({
   id,
-  type = "text",
+  type = "email",
   name,
   value,
   onChange,
